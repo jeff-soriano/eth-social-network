@@ -12,10 +12,28 @@ class Main extends Component {
                         </div>
                     </main>
                 </div>
+                <div className="row mt-3 mb-3">
+                    <div className="col-lg-12 d-flex text-center">
+                        <div className="content mr-auto ml-auto">
+                            <form>
+                                <div className="form-group mr-sm-2">
+                                    <input
+                                        id="postContent"
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="What's on your mind?"
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="btn btn-primary btn-block">Share</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 {this.props.posts.map((post, key) => {
                     return (
                         <div className="row">
-                            <main role="main" className="col-lg-12 d-flex text-center">
+                            <div className="col-lg-12 d-flex text-center">
                                 <div className="content mr-auto ml-auto">
                                     <div className="card mb-4" key={key} >
                                         <div className="card-header">
@@ -34,18 +52,18 @@ class Main extends Component {
                                             <li key={key} className="list-group-item py-2">
                                                 <small className="float-left mt-1 text-muted">
                                                     TIPS: {window.web3.utils.fromWei(post.tipAmount.toString(), 'Ether')} ETH
-                        </small>
+                                                </small>
                                                 <button
                                                     className="btn btn-link btn-sm float-right pt-0"
                                                     name={post.id}
                                                 >
                                                     TIP 0.1 ETH
-                        </button>
+                                                </button>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                            </main>
+                            </div>
                         </div>
                     )
                 })}
