@@ -30,14 +30,13 @@ class App extends Component {
     const web3 = window.web3
     // Load account
     const accounts = await web3.eth.getAccounts()
-    console.log(accounts)
     this.setState({ account: accounts[0] })
 
     // Initiate contract
     const networkId = await web3.eth.net.getId()
     const networkData = SocialNetwork.networks[networkId]
     if (networkData) {
-      const socialNetwork = web3.eth.Contract(SocialNetwork.abi, networkData.address)
+      const socialNetwork = new web3.eth.Contract(SocialNetwork.abi, networkData.address)
       const postCount = await socialNetwork.methods.postCount().call()
 
       this.setState({ socialNetwork: socialNetwork })
@@ -47,11 +46,17 @@ class App extends Component {
         const post = await socialNetwork.methods.posts(i).call()
         this.setState({ posts: [...this.state.posts, post] })
       }
-
-      console.log(this.state.posts)
     } else {
       window.alert('SocialNetwork contract not deployed to detected network')
     }
+  }
+
+  async createPost(content) {
+    this.setState({ loading: true })
+    this.state.socialNetwork.methods.createPost(content).send({ from: this.state.account })
+      .then(async (receipt) => {
+        window.location.reload()
+      })
   }
 
   constructor(props) {
@@ -63,6 +68,8 @@ class App extends Component {
       posts: [],
       loading: true
     }
+
+    this.createPost = this.createPost.bind(this)
   }
 
   render() {
@@ -71,7 +78,10 @@ class App extends Component {
         <Navbar account={this.state.account} />
         {this.state.loading ?
           <div id="loader" className="text-center mt-5"><p>Loading...</p></div> :
-          <Main posts={this.state.posts} />}
+          <Main
+            posts={this.state.posts}
+            createPost={this.createPost}
+          />}
       </div>
     );
   }

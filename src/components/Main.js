@@ -15,11 +15,15 @@ class Main extends Component {
                 <div className="row mt-3 mb-3">
                     <div className="col-lg-12 d-flex text-center">
                         <div className="content mr-auto ml-auto">
-                            <form>
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                this.props.createPost(this.postContent.value)
+                            }}>
                                 <div className="form-group mr-sm-2">
                                     <input
                                         id="postContent"
                                         type="text"
+                                        ref={(input) => this.postContent = input}
                                         className="form-control"
                                         placeholder="What's on your mind?"
                                         required
@@ -32,10 +36,10 @@ class Main extends Component {
                 </div>
                 {this.props.posts.map((post, key) => {
                     return (
-                        <div className="row">
+                        <div className="row" key={key}>
                             <div className="col-lg-12 d-flex text-center">
                                 <div className="content mr-auto ml-auto">
-                                    <div className="card mb-4" key={key} >
+                                    <div className="card mb-4">
                                         <div className="card-header">
                                             <img
                                                 className='mr-2'
