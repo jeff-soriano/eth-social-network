@@ -59,7 +59,7 @@ class Main extends Component {
                                                 </small>
                                                 <button
                                                     className="btn btn-link btn-sm float-right pt-0"
-                                                    name={post.id}
+                                                    onClick={() => this.props.tipPost(post.id, window.web3.utils.toWei('0.1', 'Ether'))}
                                                 >
                                                     TIP 0.1 ETH
                                                 </button>

@@ -46,15 +46,27 @@ class App extends Component {
         const post = await socialNetwork.methods.posts(i).call()
         this.setState({ posts: [...this.state.posts, post] })
       }
+      // Sort posts, highest tips to lowest
+      this.setState({
+        posts: this.state.posts.sort((a, b) => b.tipAmount - a.tipAmount)
+      })
     } else {
       window.alert('SocialNetwork contract not deployed to detected network')
     }
   }
 
-  async createPost(content) {
+  createPost(content) {
     this.setState({ loading: true })
     this.state.socialNetwork.methods.createPost(content).send({ from: this.state.account })
-      .then(async (receipt) => {
+      .then((receipt) => {
+        window.location.reload()
+      })
+  }
+
+  tipPost(id, tipAmount) {
+    this.setState({ loading: true })
+    this.state.socialNetwork.methods.tipPost(id).send({ from: this.state.account, value: tipAmount })
+      .then((receipt) => {
         window.location.reload()
       })
   }
@@ -70,6 +82,7 @@ class App extends Component {
     }
 
     this.createPost = this.createPost.bind(this)
+    this.tipPost = this.tipPost.bind(this)
   }
 
   render() {
@@ -81,7 +94,9 @@ class App extends Component {
           <Main
             posts={this.state.posts}
             createPost={this.createPost}
-          />}
+            tipPost={this.tipPost}
+          />
+        }
       </div>
     );
   }
