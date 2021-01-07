@@ -10,6 +10,7 @@ class App extends Component {
   async componentWillMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
+    this.setState({ loading: false })
   }
 
   async loadWeb3() {
@@ -59,7 +60,8 @@ class App extends Component {
       account: '',
       socialNetwork: null,
       postCount: 0,
-      posts: []
+      posts: [],
+      loading: true
     }
   }
 
@@ -67,7 +69,9 @@ class App extends Component {
     return (
       <div>
         <Navbar account={this.state.account} />
-        <Main posts={this.state.posts} />
+        {this.state.loading ?
+          <div id="loader" className="text-center mt-5"><p>Loading...</p></div> :
+          <Main posts={this.state.posts} />}
       </div>
     );
   }
